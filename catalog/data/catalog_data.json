@@ -1,0 +1,60 @@
+[
+  {
+    "model": "catalog.category",
+    "pk": 1,
+    "fields": {
+      "name": "Велосипеды",
+      "description": "Двухколёсные велосипеды"
+    }
+  },
+  {
+    "model": "catalog.category",
+    "pk": 2,
+    "fields": {
+      "name": "Мопеды",
+      "description": "Как велосипеды только с мотором"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 1,
+    "fields": {
+      "name": "BMX 200",
+      "description": "Лучший велосипед для трюков",
+      "image": "",
+      "category": 1,
+      "price": "20000.00",
+      "created_at": "2024-09-13T11:22:30.188Z",
+      "updated_at": "2024-09-13T11:22:30.188Z",
+      "manufactured_at": null
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 2,
+    "fields": {
+      "name": "BMX 300",
+      "description": "Новая модель легендарного BMX",
+      "image": "",
+      "category": 1,
+      "price": "25000.00",
+      "created_at": "2024-09-13T11:26:58.398Z",
+      "updated_at": "2024-09-13T11:26:58.398Z",
+      "manufactured_at": null
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 3,
+    "fields": {
+      "name": "Мопед х100",
+      "description": "Базовый мопед",
+      "image": "",
+      "category": 2,
+      "price": "40000.00",
+      "created_at": "2024-09-13T11:37:55.914Z",
+      "updated_at": "2024-09-13T11:37:55.914Z",
+      "manufactured_at": null
+    }
+  }
+]
