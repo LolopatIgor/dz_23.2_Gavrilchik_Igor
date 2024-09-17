@@ -20,12 +20,12 @@
     "pk": 1,
     "fields": {
       "name": "BMX 200",
-      "description": "Лучший велосипед для трюков",
+      "description": "Лучший велосипед для трюков. Такого другого вы нигде больше не найдёте! Попробуйте уже сегодня эту легендарную модель. Не упустите шанс.",
       "image": "",
       "category": 1,
       "price": "20000.00",
-      "created_at": "2024-09-13T11:22:30.188Z",
-      "updated_at": "2024-09-13T11:22:30.188Z",
+      "created_at": "2024-09-17T18:25:13.205Z",
+      "updated_at": "2024-09-17T18:25:13.205Z",
       "manufactured_at": null
     }
   },
@@ -38,8 +38,8 @@
       "image": "",
       "category": 1,
       "price": "25000.00",
-      "created_at": "2024-09-13T11:26:58.398Z",
-      "updated_at": "2024-09-13T11:26:58.398Z",
+      "created_at": "2024-09-17T18:25:13.205Z",
+      "updated_at": "2024-09-17T18:25:13.205Z",
       "manufactured_at": null
     }
   },
@@ -52,9 +52,23 @@
       "image": "",
       "category": 2,
       "price": "40000.00",
-      "created_at": "2024-09-13T11:37:55.914Z",
-      "updated_at": "2024-09-13T11:37:55.914Z",
+      "created_at": "2024-09-17T18:25:13.205Z",
+      "updated_at": "2024-09-17T18:25:13.205Z",
       "manufactured_at": null
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 5,
+    "fields": {
+      "name": "BMX 400",
+      "description": "Очередной бмх",
+      "image": "products/wtf-blue-1200x1200_ueisn5R.jpg",
+      "category": 1,
+      "price": "30000.00",
+      "created_at": "2024-09-17T19:57:22.594Z",
+      "updated_at": "2024-09-17T19:57:22.594Z",
+      "manufactured_at": "2024-09-17T19:57:21Z"
     }
   }
 ]
