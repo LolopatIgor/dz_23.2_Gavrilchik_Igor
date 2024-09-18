@@ -1,0 +1,23 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.description {
+    flex: 1;
+}
+
+.price {
+    margin-bottom: 2rem; /* Отступ 2 от низа карточки */
+}
+
+.mt-auto {
+    margin-top: auto; /* Отталкивает кнопку к нижней части карточки */
+}
