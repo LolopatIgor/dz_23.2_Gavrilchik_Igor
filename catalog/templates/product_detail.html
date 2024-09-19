@@ -7,7 +7,7 @@
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0"
-                                      src="{% mymedia object.image %}"  alt="..."/></div>
+                                      src="{% mymedia product_item.image %}"  alt="..."/></div>
             <div class="col-md-6">
                 <div class="small mb-1">SKU: BST-498</div>
                 <h1 class="display-5 fw-bolder">{{ product_item.name }}</h1>
@@ -22,7 +22,6 @@
                         <i class="bi-cart-fill me-1"></i>
                         Добавить в корзину
                     </button>
-                    <p>{% mymedia product_item.image %}</p>
                 </div>
             </div>
         </div>

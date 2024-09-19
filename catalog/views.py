@@ -17,9 +17,7 @@ def contacts(request):
 def product_detail(request, pk):
     # Получаем объект продукта по его первичному ключу (pk)
     product = Product.objects.get(pk=pk)
-    print(product.image)
     # Контекст для шаблона
-
     context = {
         'product_item': product
     }
