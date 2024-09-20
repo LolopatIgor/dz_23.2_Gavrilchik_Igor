@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+    <h1 class="display-4">Skystore Blog</h1>
+    <p class="lead">Skystore Blog - Делись своими мыслями.</p>
+</div>
+
+<div class="container">
+    <div class="col-12 mb-5 ml-10">
+        <a class="btn btn-outline-primary" href="{% url 'blog:create' %}">Новый блог</a>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row text-center">
+        {% for object in object_list %}
+        <div class="col-3">
+            <div class="card mb-2 box-shadow d-flex flex-column">
+                <div class="card-header">
+                    <h2 class="my-0 font-weight-normal">{{ object.title }}</h2>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-2 body">
+                        {% if object.body|length > 100 %}
+                        {{ object.body|slice:":100" }}...
+                        {% else %}
+                        {{ object.body }}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="btn-group">
+                        <a href="{% url 'blog:view' object.slug %}"
+                                class="btn btn-sm btn-outline-secondary">Показать</a>
+                        <a href="{% url 'blog:edit' object.slug %}"
+                                class="btn btn-sm btn-outline-secondary">Редактировать</a>
+                        <a href="{% url 'blog:delete' object.slug %}"
+                                class="btn btn-sm btn-outline-secondary">Удалить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
