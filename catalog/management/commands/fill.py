@@ -1,6 +1,6 @@
 import json
 from django.core.management.base import BaseCommand
-from catalog.models import Category, Product
+from catalog.models import Category, Product, BanWords
 
 
 class Command(BaseCommand):
@@ -16,10 +16,12 @@ class Command(BaseCommand):
         # Удалите все продукты и категории
         Product.objects.all().delete()
         Category.objects.all().delete()
+        BanWords.objects.all().delete()
 
         # Создайте списки для хранения объектов
         categories_for_create = []
         products_for_create = []
+        banwords_for_create = []
 
         # Чтение данных из JSON файла
         data = Command.json_read_data()
@@ -53,7 +55,8 @@ class Command(BaseCommand):
                 try:
                     category = Category.objects.get(pk=fields['category'])
                 except Category.DoesNotExist:
-                    self.stdout.write(self.style.ERROR(f"Категория с ID {fields['category']} не найдена для продукта {fields['name']}."))
+                    self.stdout.write(self.style.ERROR(
+                        f"Категория с ID {fields['category']} не найдена для продукта {fields['name']}."))
                     continue
 
                 products_for_create.append(
@@ -73,3 +76,20 @@ class Command(BaseCommand):
         # Создаем продукты в базе данных с помощью bulk_create()
         Product.objects.bulk_create(products_for_create)
         self.stdout.write(self.style.SUCCESS('Продукты успешно добавлены.'))
+
+        for entry in data:
+            model = entry['model']
+            fields = entry['fields']
+
+            # Если модель - это категория, добавляем в список для создания
+            if model == 'catalog.banwords':
+                banwords_for_create.append(
+                    BanWords(
+                        pk=entry['pk'],
+                        name=fields['name']
+                    )
+                )
+
+        # Создаем категории в базе данных с помощью bulk_create()
+        BanWords.objects.bulk_create(banwords_for_create)
+        self.stdout.write(self.style.SUCCESS('Запрещенные слова успешно добавлены.'))

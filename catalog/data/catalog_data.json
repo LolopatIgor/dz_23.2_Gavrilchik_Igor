@@ -1,74 +1,115 @@
 [
   {
     "model": "catalog.category",
-    "pk": 1,
+    "pk": 4,
     "fields": {
-      "name": "Велосипеды",
-      "description": "Двухколёсные велосипеды"
+      "name": "Разработка",
+      "description": "Помощь в разработке ПО"
     }
   },
   {
     "model": "catalog.category",
-    "pk": 2,
-    "fields": {
-      "name": "Мопеды",
-      "description": "Как велосипеды только с мотором"
-    }
-  },
-  {
-    "model": "catalog.product",
-    "pk": 1,
-    "fields": {
-      "name": "BMX 200",
-      "description": "Лучший велосипед для трюков. Такого другого вы нигде больше не найдёте! Попробуйте уже сегодня эту легендарную модель. Не упустите шанс.",
-      "image": "",
-      "category": 1,
-      "price": "20000.00",
-      "created_at": "2024-09-17T18:25:13.205Z",
-      "updated_at": "2024-09-17T18:25:13.205Z",
-      "manufactured_at": null
-    }
-  },
-  {
-    "model": "catalog.product",
-    "pk": 2,
-    "fields": {
-      "name": "BMX 300",
-      "description": "Новая модель легендарного BMX",
-      "image": "",
-      "category": 1,
-      "price": "25000.00",
-      "created_at": "2024-09-17T18:25:13.205Z",
-      "updated_at": "2024-09-17T18:25:13.205Z",
-      "manufactured_at": null
-    }
-  },
-  {
-    "model": "catalog.product",
-    "pk": 3,
-    "fields": {
-      "name": "Мопед х100",
-      "description": "Базовый мопед",
-      "image": "",
-      "category": 2,
-      "price": "40000.00",
-      "created_at": "2024-09-17T18:25:13.205Z",
-      "updated_at": "2024-09-17T18:25:13.205Z",
-      "manufactured_at": null
-    }
-  },
-  {
-    "model": "catalog.product",
     "pk": 5,
     "fields": {
-      "name": "BMX 400",
-      "description": "Очередной бмх",
-      "image": "products/wtf-blue-1200x1200_ueisn5R.jpg",
-      "category": 1,
-      "price": "30000.00",
-      "created_at": "2024-09-17T19:57:22.594Z",
-      "updated_at": "2024-09-17T19:57:22.594Z",
-      "manufactured_at": "2024-09-17T19:57:21Z"
+      "name": "Умный дом",
+      "description": "ПО для управления умным домом"
+    }
+  },
+  {
+    "model": "catalog.product",
+    "pk": 9,
+    "fields": {
+      "name": "Format Code",
+      "description": "Помощь в форматировнии кода при разработке",
+      "image": "",
+      "category": 4,
+      "price": "1000.00",
+      "created_at": "2024-10-08T14:39:20.655Z",
+      "updated_at": "2024-10-08T15:17:22.789Z",
+      "manufactured_at": null
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 1,
+    "fields": {
+      "name": "Казино"
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 2,
+    "fields": {
+      "name": "криптовалюта"
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 3,
+    "fields": {
+      "name": "крипта"
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 4,
+    "fields": {
+      "name": "биржа"
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 5,
+    "fields": {
+      "name": "дешево"
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 6,
+    "fields": {
+      "name": "бесплатно"
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 7,
+    "fields": {
+      "name": "обман"
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 8,
+    "fields": {
+      "name": "полиция"
+    }
+  },
+  {
+    "model": "catalog.banwords",
+    "pk": 9,
+    "fields": {
+      "name": "радар"
+    }
+  },
+  {
+    "model": "catalog.version",
+    "pk": 2,
+    "fields": {
+      "product": 9,
+      "number": "0.95000000",
+      "name": "Тестовая преАльфа",
+      "is_current": false
+    }
+  },
+  {
+    "model": "catalog.version",
+    "pk": 3,
+    "fields": {
+      "product": 9,
+      "number": "1.00000000",
+      "name": "Релиз",
+      "is_current": true
     }
   }
 ]

@@ -31,3 +31,28 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
+
+
+class BanWords(models.Model):
+    name = models.CharField(max_length=200, verbose_name='Слово')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Запрещенное слово'
+        verbose_name_plural = 'Запрещенные слова'
+
+
+class Version(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='Продукт', related_name='versions')
+    number = models.DecimalField(max_digits=10, decimal_places=8, verbose_name='Номер версии')
+    name = models.CharField(max_length=200, verbose_name='Название версии')
+    is_current = models.BooleanField(default=False, verbose_name='Признак текущей версии')
+
+    def __str__(self):
+        return f"{self.product.name} - {self.number}"
+
+    class Meta:
+        verbose_name = 'Версия продукта'
+        verbose_name_plural = 'Версии продуктов'

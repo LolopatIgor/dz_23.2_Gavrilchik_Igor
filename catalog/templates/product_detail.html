@@ -7,9 +7,14 @@
     <div class="container px-4 px-lg-5 my-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
             <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0"
-                                      src="{% mymedia object.image %}"  alt="..."/></div>
+                                       src="{% mymedia object.image %}" alt="..."/></div>
             <div class="col-md-6">
-                <div class="small mb-1">SKU: BST-498</div>
+                {% if current_version %}
+                    <div class="small mb-1">Текущая версия: {{ current_version.number }} ({{ current_version.name }})</div>
+                {% else %}
+                    <div class="small mb-1">Нет текущей версии</div>
+                {% endif %}
+
                 <h1 class="display-5 fw-bolder">{{ object.name }}</h1>
                 <div class="fs-5 mb-5">
                     <span>{{ object.price }} ₽</span>
