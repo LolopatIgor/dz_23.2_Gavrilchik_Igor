@@ -1,6 +1,6 @@
-from django.core.exceptions import ValidationError
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.forms import inlineformset_factory
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView
@@ -8,7 +8,7 @@ from catalog.models import Product, Version
 from catalog.forms import ProductForm, VersionForm
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'home.html'
     context_object_name = 'products'
@@ -28,7 +28,7 @@ class ProductListView(ListView):
         return context
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'product_detail.html'
 
@@ -45,7 +45,7 @@ class ProductDetailView(DetailView):
         return context
 
 
-class CatalogCreateView(CreateView):
+class CatalogCreateView(LoginRequiredMixin, CreateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
@@ -56,6 +56,9 @@ class CatalogCreateView(CreateView):
         contex_data['formset'] = SubjectFormset
         return contex_data
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user  # Привязка пользователя к продукту
+        return super().form_valid(form)
 
 class ContactsPageView(View):
     def get(self, request, *args, **kwargs):
@@ -66,18 +69,18 @@ def contacts(request):
     return render(request, 'contacts.html')
 
 
-class CatalogEditView(UpdateView):
+class CatalogEditView(LoginRequiredMixin, UpdateView):
     model = Product
     form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
 
     def get_context_data(self, **kwargs):
         contex_data = super().get_context_data(**kwargs)
-        SubjectFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        subject_formset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
         if self.request.method == 'POST':
-            contex_data['formset'] = SubjectFormset(self.request.POST, instance=self.object)
+            contex_data['formset'] = subject_formset(self.request.POST, instance=self.object)
         else:
-            contex_data['formset'] = SubjectFormset(instance=self.object)
+            contex_data['formset'] = subject_formset(instance=self.object)
 
         return contex_data
 
