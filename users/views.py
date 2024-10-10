@@ -1,16 +1,24 @@
+from datetime import timedelta
+
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.contrib.auth.hashers import make_password
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.template.loader import render_to_string
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView
-
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import force_str, force_bytes
+from django.contrib.auth.tokens import default_token_generator
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from config import settings
 from users.forms import UserRegisterForm
 from users.models import User
 from django.http import HttpResponse
 import random
 import string
+import time
 
 
 def generate_random_password(length=8):
@@ -53,6 +61,27 @@ def password_reset_view(request):
     return render(request, 'users/password_request.html')
 
 
+def activate(request, uidb64, token):
+    try:
+        # Декодируем идентификатор пользователя из URL
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    # Проверяем токен
+    if user is not None and default_token_generator.check_token(user, token):
+        # Если токен валиден, активируем пользователя
+        user.is_active = True
+        user.save()
+        messages.success(request, 'Ваш аккаунт успешно подтвержден!')
+        return render(request, 'users/activation_confirm.html', {'message': 'Ваш аккаунт успешно подтвержден!'})
+    else:
+        # Если токен недействителен, выводим сообщение об ошибке
+        messages.error(request, 'Ссылка активации недействительна!')
+        return render(request, 'users/activation_confirm.html', {'message': 'Ссылка активации недействительна!'})
+
+
 class RegisterView(CreateView):
     model = User
     form_class = UserRegisterForm
@@ -60,20 +89,33 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('users:login')
 
     def form_valid(self, form):
-        user = form.save()
+        # Сохраняем пользователя, но не активируем его до верификации
+        user = form.save(commit=False)
+        user.is_active = False  # Деактивируем пользователя до верификации
+        user.save()
 
-        # Отправка электронного письма
-        subject = 'Добро пожаловать на наш сайт!'
-        message = f'Привет! Спасибо за регистрацию на нашем сайте.'
-        recipient_list = [user.email]
+        # Вызов родительского метода form_valid
+        response = super().form_valid(form)
 
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            recipient_list,
-            fail_silently=False,
+        # Генерация токена и активационной ссылки
+        token = default_token_generator.make_token(user)
+        activation_link = reverse('users:activate', kwargs={
+            'uidb64': urlsafe_base64_encode(force_bytes(user.pk)),
+            'token': token,
+        })
+
+        # Отправка письма с активацией
+        current_site = get_current_site(self.request)
+        subject = 'Подтверждение регистрации'
+        message = (
+            f"Привет, {user.username or user.email}!\n\n"
+            f"Для подтверждения регистрации на нашем сайте, перейдите по следующей ссылке:\n"
+            f"http://{current_site.domain}{activation_link}\n\n"
+            "Спасибо за регистрацию!"
         )
+        user.email_user(subject, message)
 
-        return super().form_valid(form)
+        messages.success(self.request, 'Регистрация прошла успешно! Проверьте вашу почту для подтверждения аккаунта.')
 
+        # Возвращаем ответ после отправки письма
+        return response

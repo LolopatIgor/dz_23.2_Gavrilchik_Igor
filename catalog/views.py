@@ -8,7 +8,7 @@ from catalog.models import Product, Version
 from catalog.forms import ProductForm, VersionForm
 
 
-class ProductListView(LoginRequiredMixin, ListView):
+class ProductListView(ListView):
     model = Product
     template_name = 'home.html'
     context_object_name = 'products'
