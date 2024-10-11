@@ -23,6 +23,12 @@ class ProductForm(StyleFormMixin, forms.ModelForm):
         model = Product
         fields = ('name', 'description', 'image', 'category', 'price')
 
+
+class ProductManagerForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('description', 'category', 'is_published')
+
     def clean_name(self):
         name = self.cleaned_data.get('name', '')
         forbidden_words = get_forbidden_words()
@@ -42,4 +48,3 @@ class VersionForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Version
         fields = '__all__'
-

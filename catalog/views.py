@@ -1,17 +1,30 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Q
 from django.forms import inlineformset_factory
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView
 from catalog.models import Product, Version
-from catalog.forms import ProductForm, VersionForm
+from catalog.forms import ProductForm, VersionForm, ProductManagerForm
+from django.core.exceptions import PermissionDenied
 
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'home.html'
     context_object_name = 'products'
+
+    def get_queryset(self):
+        user = self.request.user
+        if (user.has_perm('catalog.can_edit_is_published') and
+                user.has_perm('catalog.can_edit_description') and
+                user.has_perm('catalog.can_edit_category')):
+            return Product.objects.filter()
+        else:
+            return Product.objects.filter(
+                Q(is_published=True) | Q(user=user)
+            )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -52,13 +65,14 @@ class CatalogCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         contex_data = super().get_context_data(**kwargs)
-        SubjectFormset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
-        contex_data['formset'] = SubjectFormset
+        subject_formset = inlineformset_factory(Product, Version, form=VersionForm, extra=1)
+        contex_data['formset'] = subject_formset
         return contex_data
 
     def form_valid(self, form):
         form.instance.user = self.request.user  # Привязка пользователя к продукту
         return super().form_valid(form)
+
 
 class ContactsPageView(View):
     def get(self, request, *args, **kwargs):
@@ -69,10 +83,24 @@ def contacts(request):
     return render(request, 'contacts.html')
 
 
-class CatalogEditView(LoginRequiredMixin, UpdateView):
+class CatalogEditView(UpdateView):
     model = Product
-    form_class = ProductForm
     success_url = reverse_lazy('catalog:home')
+
+    def get_form_class(self):
+        user = self.request.user
+        print(user.email)
+        print(user.has_perm('can_edit_is_published'))
+        print(user.has_perm('can_edit_description'))
+        print(user.has_perm('can_edit_category'))
+        if user == self.object.user:
+            return ProductForm
+        elif (user.has_perm('catalog.can_edit_is_published') and
+              user.has_perm('catalog.can_edit_description') and
+              user.has_perm('catalog.can_edit_category')):
+            return ProductManagerForm
+        else:
+            raise PermissionDenied
 
     def get_context_data(self, **kwargs):
         contex_data = super().get_context_data(**kwargs)
