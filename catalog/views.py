@@ -5,9 +5,10 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, DetailView, TemplateView, CreateView, UpdateView
-from catalog.models import Product, Version
+from catalog.models import Product, Version, Category
 from catalog.forms import ProductForm, VersionForm, ProductManagerForm
 from django.core.exceptions import PermissionDenied
+from catalog.services import get_cached_categories
 
 
 class ProductListView(LoginRequiredMixin, ListView):
@@ -126,3 +127,11 @@ class CatalogEditView(UpdateView):
             formset.save()
 
         return super().form_valid(form)
+
+class CategoryListView(ListView):
+    model = Category
+    template_name = 'catalog/category_list.html'
+    context_object_name = 'categories'
+
+    def get_queryset(self):
+        return get_cached_categories()
